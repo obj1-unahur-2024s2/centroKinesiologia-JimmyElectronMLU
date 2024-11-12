@@ -1,0 +1,234 @@
+import aparatos.*
+import pacientes.*
+import centro.*
+
+
+describe "test 1" {
+  const leonardo = new Paciente(edad = 40, fortaleza = 20, dolor = 10)
+  const milena = new Paciente(edad = 3, fortaleza = 50, dolor = 30)
+  
+  const magneto = new Magneto() 
+  const bicicleta = new Bicicleta()
+  const minitramp = new Minitramp()  
+  test "Leonardo puede usar los tres aparatos creados" {
+    //arrange(preparacion)
+
+    //act(acto)
+    
+    //assert(afirmacion)
+    assert.that(leonardo.puedeUsarAparato(magneto))
+    assert.that(leonardo.puedeUsarAparato(bicicleta))
+    assert.that(leonardo.puedeUsarAparato(minitramp))
+  }
+
+  test "Milena puede usar sólo el magneto" {
+    //arrange(preparacion)
+
+    //act(acto)
+    
+    //assert(afirmacion)
+    assert.that(milena.puedeUsarAparato(magneto))
+    assert.notThat(milena.puedeUsarAparato(bicicleta))
+    assert.notThat(milena.puedeUsarAparato(minitramp))
+  }
+
+  test "Después de usar el magneto una vez, 
+  el nivel de dolor de Leonardo baja a 9" {
+    //arrange(preparacion)
+
+    //act(acto)
+    leonardo.usarAparato(magneto)
+    
+    //assert(afirmacion) 
+    assert.equals(9, leonardo.dolor())
+  }
+
+  test "Después de usar el magneto una vez, 
+  el nivel de dolor de Milena baja a 27." {
+    //arrange(preparacion)
+
+    //act(acto)
+    milena.usarAparato(magneto)
+    
+    //assert(afirmacion)
+    assert.equals(27, milena.dolor())
+  }
+
+  test "Después de usar la bicicleta una vez, 
+  el nivel de dolor de Leonardo baja a 6, y la fortaleza sube a 23" {
+    //arrange(preparacion)
+
+    //act(acto)
+    leonardo.usarAparato(bicicleta)
+    
+    //assert(afirmacion)
+    assert.equals(6, leonardo.dolor())
+    assert.equals(23, leonardo.fortaleza())
+  }
+
+  test "Después de usar el minitramp una vez, 
+  la fortaleza de Leonardo sube a 24." {
+    //arrange(preparacion)
+
+    //act(acto)
+    leonardo.usarAparato(minitramp)
+    
+    //assert(afirmacion)
+    assert.equals(24, leonardo.fortaleza())
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+
+describe "test 2" {
+  const leonardo = new Paciente(edad = 40, fortaleza = 20, dolor = 10)
+  const milena = new Paciente(edad = 3, fortaleza = 50, dolor = 30)
+  
+  const magneto = new Magneto() 
+  const bicicleta = new Bicicleta()
+  const minitramp = new Minitramp() 
+  
+  const rutina1 = new Rutina(aparatos =[bicicleta,minitramp,bicicleta,magneto])
+  const rutina2 = new Rutina(aparatos=[magneto,bicicleta])
+
+  test "Leonardo puede hacer la rutina que tiene asignada. 
+  Después de hacerla una vez, su nivel de dolor baja a 1.8, 
+  y su fortaleza sube a 30" {
+    //arrange(preparacion)
+    leonardo.puedeRealizarRutina(rutina1)
+
+    //act(acto)
+    leonardo.realizarRutina(rutina1)
+    
+    //assert(afirmacion)
+
+    assert.equals(30, leonardo.fortaleza())
+    assert.equals(1.8, leonardo.dolor())
+  }
+
+  test "Milena no puede hacer la rutina que tiene asignada." {
+    //arrange(preparacion)
+
+    //act(acto)
+    
+    //assert(afirmacion)
+    assert.notThat(milena.puedeRealizarRutina(rutina2))
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////
+
+describe "test 3" {
+  const nicolas = new Resistente(edad = 40, fortaleza = 20, dolor = 10)
+  const victoria = new Caprichoso(edad = 30, fortaleza = 40, dolor = 10)
+  const julian = new Caprichoso(edad = 20, fortaleza = 50, dolor = 54)
+  const zoe = new RapidaRecuperacion(edad = 50, fortaleza = 40, dolor = 14)
+  
+  const magneto = new Magneto() 
+  const bicicleta = new Bicicleta()
+  const minitramp = new Minitramp() 
+  const bicicletaRoja = new Bicicleta(color=rojo)
+  const magnetoVerde = new Magneto(color=verde)
+ 
+  const rutina1 = new Rutina(aparatos =[bicicleta,minitramp,bicicleta,magneto])
+  const rutina3 = new Rutina(aparatos=[bicicletaRoja,magnetoVerde,bicicleta])
+
+  test "Nicolás puede hacer la rutina que tiene asignada. Después de hacerla una vez, 
+  su nivel de dolor baja a 1.8, y su fortaleza sube a 34." {
+    //arrange(preparacion)
+
+    //act(acto)
+    nicolas.realizarRutina(rutina1)
+    
+    //assert(afirmacion)
+    assert.equals(1.8, nicolas.dolor())
+    assert.equals(34, nicolas.fortaleza())
+  }
+  test "Victoria no puede hacer la rutina que tiene asignada." {
+    //arrange(preparacion)
+
+    //act(acto)
+    
+    //assert(afirmacion)
+    assert.notThat(victoria.puedeRealizarRutina(rutina1))
+  }
+
+  test "Julián puede hacer la rutina que tiene asignada. Después de hacerla una vez, 
+  su nivel de dolor baja a 29.3, y su fortaleza sube a 62." {
+    //arrange(preparacion)
+    julian.puedeRealizarRutina(rutina3)
+
+    //act(acto)
+    julian.realizarRutina(rutina3)
+    
+    //assert(afirmacion)
+    assert.equals(29.3, julian.dolor())
+    assert.equals(62, julian.fortaleza())
+  }
+
+  test "Zoe puede hacer la rutina que tiene asignada. Después de asignar a 2 el valor de 
+  decremento de dolor para pacientes de rápida recuperación, y de que Zoe haga su 
+  rutinauna vez, su nivel de dolor baja a 3.4, y su fortaleza sube a 51." {
+    //arrange(preparacion)
+    zoe.puedeRealizarRutina(rutina1)
+    disminucionRapida.decrementoDelDolor(2)
+
+    //act(acto)
+    zoe.realizarRutina(rutina1)
+    
+    //assert(afirmacion)
+    assert.equals(3.4, zoe.dolor())
+    assert.equals(51, zoe.fortaleza())
+  }
+}
+////////////////////////////////////////////////////////////////////////////////////
+
+describe "test 4" {
+  const magneto = new Magneto() 
+  const bicicleta = new Bicicleta()
+  const minitramp = new Minitramp() 
+  const bicicletaRoja = new Bicicleta(color=rojo)
+  const magnetoVerde = new Magneto(color=verde)
+
+  const unTecnico = tecnico
+
+  method initialize(){
+     centro.agregarAparatos([magneto,bicicleta,minitramp,bicicletaRoja,magnetoVerde])
+  }
+  test "Saber si está en óptimas condiciones, o sea, 
+  si ninguno de sus aparatos necesita mantenimiento." {
+    //arrange(preparacion)
+
+    //act(acto)
+    
+    //assert(afirmacion)
+    assert.that(centro.estaEnOptimasCondiciones())
+  }
+
+  test "las maquinas no necesitan mantenimineto, 
+  por ende el centro no podria estar complicado." {
+    //arrange(preparacion)
+
+    //act(acto)
+    
+    //assert(afirmacion)
+    assert.notThat(centro.estaComplicado())
+  }
+
+  test "Viene un tecnico al centro y realiza mantenimiento a todos los aparatos que lo necesiten." {
+    //arrange(preparacion)
+
+    //act(acto)
+    centro.llamarTecnico(unTecnico)
+    
+    //assert(afirmacion)
+    assert.equals(1, centro.visitasDelTecnico())
+    assert.that(centro.estaEnOptimasCondiciones())
+  }
+}
+
+    //arrange(preparacion)
+
+    //act(acto)
+    
+    //assert(afirmacion)
